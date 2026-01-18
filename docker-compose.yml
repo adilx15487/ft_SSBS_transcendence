@@ -1,0 +1,133 @@
+# ================================
+# SSBS - Smart School Bus System
+# Docker Compose Configuration
+# ================================
+
+version: '3.8'
+
+services:
+  # =====================================
+  # Frontend Service
+  # =====================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ssbs-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=${APP_ENV:-development}
+      - VITE_API_URL=${VITE_API_URL:-http://localhost:8000/api}
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - ssbs-network
+
+  # =====================================
+  # Backend Service
+  # =====================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ssbs-backend
+    restart: unless-stopped
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    environment:
+      - APP_ENV=${APP_ENV:-development}
+      - SECRET_KEY=${SECRET_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-ssbs_db}
+      - DB_USER=${DB_USER:-ssbs_user}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - OAUTH_42_CLIENT_ID=${OAUTH_42_CLIENT_ID}
+      - OAUTH_42_CLIENT_SECRET=${OAUTH_42_CLIENT_SECRET}
+      - OAUTH_42_REDIRECT_URI=${OAUTH_42_REDIRECT_URI}
+    volumes:
+      - ./backend:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - ssbs-network
+
+  # =====================================
+  # PostgreSQL Database
+  # =====================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: ssbs-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=${DB_NAME:-ssbs_db}
+      - POSTGRES_USER=${DB_USER:-ssbs_user}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-changeme}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-ssbs_user} -d ${DB_NAME:-ssbs_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ssbs-network
+
+  # =====================================
+  # Redis Cache
+  # =====================================
+  redis:
+    image: redis:7-alpine
+    container_name: ssbs-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - ssbs-network
+
+  # =====================================
+  # Adminer (Database Management UI)
+  # Optional - comment out in production
+  # =====================================
+  adminer:
+    image: adminer:latest
+    container_name: ssbs-adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - ssbs-network
+
+# =====================================
+# Networks
+# =====================================
+networks:
+  ssbs-network:
+    driver: bridge
+
+# =====================================
+# Volumes
+# =====================================
+volumes:
+  postgres-data:
+    name: ssbs-postgres-data
+  redis-data:
+    name: ssbs-redis-data
