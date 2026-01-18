@@ -27,7 +27,29 @@
 
 ---
 
-## 🚨 Team Rules
+## � Tech Stack
+
+> **⚠️ To Be Decided by Each Team Member**
+
+| Layer | Technology | Status | Responsible |
+|-------|------------|--------|-------------|
+| **Frontend** | *TBD* | 🟡 Not decided | Frontend Dev |
+| **Backend** | *TBD* | 🟡 Not decided | Backend Team |
+| **Database** | PostgreSQL | ✅ Confirmed | Backend Team |
+| **Authentication** | *TBD* | 🟡 Not decided | Security/DevOps |
+| **Containerization** | Docker & Docker Compose | ✅ Confirmed | Security/DevOps |
+| **CI/CD** | GitHub Actions | ✅ Confirmed | Security/DevOps |
+
+### How Tech Decisions Work:
+- **Frontend Dev** → Chooses frontend framework (React, Vue, Vanilla JS, etc.)
+- **Backend Team** → Chooses backend framework (Django, NestJS, Node.js, etc.)
+- **Security/DevOps** → Sets up auth system, Docker, deployment
+
+> **Each member decides the tools for their own area!**
+
+---
+
+## �🚨 Team Rules
 
 > **⚠️ READ THIS CAREFULLY BEFORE YOU START!**
 
@@ -68,7 +90,7 @@ cp .env.example .env
 |-----------|------------------|------------------------------|
 | Frontend Developer | `frontend` | `feat/frontend-login-YOURNAME` |
 | Backend Developer | `backend` | `feat/backend-api-YOURNAME` |
-| DevOps | `develop` | `feat/devops-docker-YOURNAME` |
+| Security & DevOps | `develop` | `feat/security-auth-YOURNAME` |
 
 ---
 
@@ -321,15 +343,16 @@ make logs      # View logs
 
 ---
 
-## 👥 Team
+## 👥 Team (4 Members)
 
-| Member | Role | Branch | GitHub |
-|--------|------|--------|--------|
-| *Name 1* | Team Lead | all | @username |
-| *Name 2* | Frontend | `frontend` | @username |
-| *Name 3* | Frontend | `frontend` | @username |
-| *Name 4* | Backend | `backend` | @username |
-| *Name 5* | Backend | `backend` | @username |
+| Member | Role | Responsibility | Branch | GitHub |
+|--------|------|----------------|--------|--------|
+| *Name 1* | Frontend Developer | UI/UX, Frontend Logic | `frontend` | @username |
+| *Name 2* | Backend Developer | API, Database | `backend` | @username |
+| *Name 3* | Backend Developer | API, Database | `backend` | @username |
+| *Name 4* | Security & DevOps | Auth, Docker, CI/CD | `develop` | @username |
+
+> **Note:** Each member is responsible for their own area. Update names and GitHub usernames.
 
 ---
 
