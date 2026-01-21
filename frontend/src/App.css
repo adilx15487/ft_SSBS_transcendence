@@ -1,0 +1,23 @@
+/* App-specific styles - Tailwind handles most styling */
+
+/* Reset root styles for Tailwind */
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Custom animations if needed */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
